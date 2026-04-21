@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RenewCast AI — Renewable Energy Forecasting</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+    <div class="container">
+        <div class="hdr-inner">
+            <a href="#home" class="logo">
+                <div class="logo-bubble">
+                    <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="15" stroke="#fff" stroke-width="2.5"/>
+                        <path d="M20 10L20 30M13 20L27 20" stroke="#fff" stroke-width="2.5"/>
+                        <circle cx="20" cy="20" r="4" fill="#fff"/>
+                    </svg>
+                </div>
+                <span class="logo-name">RenewCast AI</span>
+            </a>
+            <nav class="nav">
+                <a href="#home"     class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#results"  class="nav-link">Results</a>
+                <a href="#about"    class="nav-link">About</a>
+            </nav>
+            <div class="hdr-right"><a href="#home" class="btn-signup">Get Forecast</a></div>
+        </div>
+    </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+    <div class="sky"></div><div class="clouds-back"></div><div class="clouds-mid"></div>
+    <div class="clouds-fore"></div><div class="sky-rays"></div><div class="sky-overlay"></div>
+    <div class="particles">
+        <span class="particle" style="--x:8%;--y:18%;--s:5px;--d:4s"></span>
+        <span class="particle" style="--x:82%;--y:12%;--s:4px;--d:6s"></span>
+        <span class="particle" style="--x:55%;--y:72%;--s:6px;--d:3.5s"></span>
+        <span class="particle" style="--x:22%;--y:58%;--s:3px;--d:7s"></span>
+        <span class="particle" style="--x:91%;--y:48%;--s:5px;--d:5s"></span>
+    </div>
+    <div class="hero-content container">
+        <div class="hero-text">
+            <div class="hero-badge"><span class="badge-dot"></span>Random Forest · Live Weather</div>
+            <h1 class="hero-title">Weather-Based<br><em>Renewable Energy </em>Power Forecasting<br>and Visualization</h1>
+            <p class="hero-sub">Solar &amp; wind power predictions using Random Forest ML trained on real Kaggle datasets with live OpenWeatherMap data — for any city on Earth.</p>
+            <!-- <div class="hero-stats">
+                <div class="hstat"><span class="hstat-val">Real</span><span class="hstat-lbl">Kaggle Data</span></div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-val">70/30</span><span class="hstat-lbl">Train/Test</span></div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-val">RF</span><span class="hstat-lbl">Algorithm</span></div>
+                <div class="hstat-div"></div>
+                <div class="hstat"><span class="hstat-val">4</span><span class="hstat-lbl">Features</span></div>
+            </div> -->
+        </div>
+        <!-- Forecast card -->
+        <div class="forecast-card">
+            <div class="fc-header">
+                <div class="fc-icon-ring">☀️</div>
+                <div><h3 class="fc-card-title">Generate Forecast</h3><p class="fc-card-sub">Enter a location to begin</p></div>
+            </div>
+            <div class="itabs">
+                <button class="itab active" data-tab="city">
+                    <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    City Name
+                </button>
+                <button class="itab" data-tab="coords">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>
+                    Coordinates
+                </button>
+            </div>
+            <div class="tab-content active" id="city-tab">
+                <div class="fg">
+                    <label>CITY NAME</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        <input type="text" id="city-input" placeholder="e.g., Hyderabad, London, New York" class="ifield">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="coords-tab">
+                <div class="fg-row">
+                    <div class="fg"><label>LATITUDE</label><input type="number" id="lat-input" placeholder="17.3850" class="ifield" step="0.0001"></div>
+                    <div class="fg"><label>LONGITUDE</label><input type="number" id="lon-input" placeholder="78.4867" class="ifield" step="0.0001"></div>
+                </div>
+            </div>
+            <button class="btn-predict" id="predict-btn">
+                <span>Generate Forecast</span>
+                <div class="btn-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            </button>
+            <!-- <div class="fc-sources">
+                <span class="fc-src-label">Dataset:</span>
+                <span class="fc-src-chip">📊 Kaggle Solar</span>
+                <span class="fc-src-chip">💨 Kaggle Wind</span>
+            </div> -->
+        </div>
+    </div>
+    <div class="scroll-hint">
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+        <span>Scroll to features</span>
+    </div>
+</section>
+
+<!-- ══ FEATURES SECTION ══ -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-intro">
+            <span class="eyebrow">Advanced Analysis</span>
+            <h2 class="section-title">Five Analytical Modes</h2>
+            <p class="section-sub">Tab-switchable features — each backed by a dedicated ML-powered API endpoint.</p>
+        </div>
+
+        <div class="feature-tabs-bar">
+            <button class="ftab active" data-ftab="compare">
+                <span class="ftab-icon">⚖️</span>
+                <span class="ftab-label">City Comparison<br><small>Up to 3 cities</small></span>
+            </button>
+            <button class="ftab" data-ftab="household">
+                <span class="ftab-icon">🏠</span>
+                <span class="ftab-label">Household<br><small>Solar panel sizing</small></span>
+            </button>
+            <button class="ftab" data-ftab="industrial">
+                <span class="ftab-icon">🏭</span>
+                <span class="ftab-label">Industrial<br><small>Panels + turbines</small></span>
+            </button>
+            <button class="ftab" data-ftab="besttime">
+                <span class="ftab-icon">⏰</span>
+                <span class="ftab-label">Best Time Advisor<br><small>Smart scheduling</small></span>
+            </button>
+            <button class="ftab" data-ftab="monthly">
+                <span class="ftab-icon">📅</span>
+                <span class="ftab-label">Monthly Analysis<br><small>Year-round estimate</small></span>
+            </button>
+        </div>
+
+        <!-- ── TAB 1: CITY COMPARISON ── -->
+        <div class="ftab-panel active" id="panel-compare">
+            <div class="panel-card">
+                <h3 class="panel-title">⚖️ Multi-City Renewable Energy Comparison</h3>
+                <p class="panel-desc">Compare real-time renewable energy potential across 2 or 3 cities simultaneously. Useful for site selection, regional energy planning, and feasibility studies. Uses live weather data fed into the trained ML model.</p>
+                <div class="panel-form">
+                    <div id="compare-city-list">
+                        <div class="compare-city-row">
+                            <div class="city-badge">City 1</div>
+                            <div class="input-wrap"><svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <input type="text" class="ifield compare-city-input" placeholder="e.g., Hyderabad"></div>
+                        </div>
+                        <div class="compare-city-row">
+                            <div class="city-badge">City 2</div>
+                            <div class="input-wrap"><svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <input type="text" class="ifield compare-city-input" placeholder="e.g., Chennai"></div>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top:14px">
+                        <button class="btn-outline-secondary" id="add-city-btn">+ Add City 3</button>
+                        <button class="btn-run" id="compare-btn">Compare Cities →</button>
+                    </div>
+                </div>
+                <div class="panel-result" id="compare-result" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- ── TAB 2: HOUSEHOLD ── -->
+        <div class="ftab-panel" id="panel-household">
+            <div class="panel-card">
+                <h3 class="panel-title">🏠 Household Energy Calculator</h3>
+                <p class="panel-desc">Calculate renewable energy coverage and the exact number of solar panels &amp; wind turbines required for your household appliances. Based on MNRE India guidelines and standard panel specs.</p>
+                <div class="panel-form">
+                    <div class="form-row">
+                        <div class="fg">
+                            <label>CITY</label>
+                            <div class="input-wrap"><svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <input type="text" id="hh-city" placeholder="e.g., Hyderabad" class="ifield"></div>
+                        </div>
+                        <div class="fg fg-sm"><label>NO. OF HOUSES</label><input type="number" id="hh-num-houses" value="1" min="1" class="ifield"></div>
+                        <div class="fg fg-sm"><label>DAILY USE HOURS</label><input type="number" id="hh-daily-hours" value="8" min="1" max="24" class="ifield"></div>
+                    </div>
+                    <p class="appliance-label">SELECT APPLIANCES PER HOUSE:</p>
+                    <div class="appliance-grid" id="appliance-grid"></div>
+                    <button class="btn-run" id="household-btn">Calculate + Panel Sizing →</button>
+                </div>
+                <div class="panel-result" id="household-result" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- ── TAB 3: INDUSTRIAL ── -->
+        <div class="ftab-panel" id="panel-industrial">
+            <div class="panel-card">
+                <h3 class="panel-title">🏭 Industrial Energy Calculator</h3>
+                <p class="panel-desc">Estimate renewable energy coverage for industrial facilities with detailed solar panel and wind turbine sizing tables. Includes per-unit coverage breakdown, CO₂ savings, and payback period.</p>
+                <div class="panel-form">
+                    <div class="form-row">
+                        <div class="fg">
+                            <label>CITY</label>
+                            <div class="input-wrap"><svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <input type="text" id="ind-city" placeholder="e.g., Hyderabad" class="ifield"></div>
+                        </div>
+                        <div class="fg">
+                            <label>INDUSTRY TYPE</label>
+                            <select id="ind-sector" class="ifield ifield-select">
+                                <option value="small_factory">Small Factory (50 kW)</option>
+                                <option value="medium_factory">Medium Factory (200 kW)</option>
+                                <option value="large_factory">Large Factory (1000 kW)</option>
+                                <option value="hospital">Hospital 100-bed (300 kW)</option>
+                                <option value="school">School / College (50 kW)</option>
+                                <option value="shopping_mall">Shopping Mall (500 kW)</option>
+                                <option value="data_center">Data Centre small (800 kW)</option>
+                                <option value="water_treatment">Water Treatment Plant (150 kW)</option>
+                                <option value="cold_storage">Cold Storage (120 kW)</option>
+                                <option value="textile_mill">Textile Mill (400 kW)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="fg fg-sm"><label>NUMBER OF UNITS</label><input type="number" id="ind-num-units" value="1" min="1" max="10" class="ifield"></div>
+                        <div class="fg fg-sm"><label>SHIFT HOURS / DAY</label><input type="number" id="ind-shift-hours" value="8" min="1" max="24" class="ifield"></div>
+                        <button class="btn-run" id="industrial-btn">Calculate + Panel Sizing →</button>
+                    </div>
+                </div>
+                <div class="panel-result" id="industrial-result" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- ── TAB 4: BEST TIME ADVISOR ── -->
+        <div class="ftab-panel" id="panel-besttime">
+            <div class="panel-card">
+                <h3 class="panel-title">⏰ Best Time to Use Energy — Smart Scheduler</h3>
+                <p class="panel-desc">Find the optimal time slots in the next 48 hours to run heavy appliances using maximum renewable energy — minimising grid dependency and electricity cost. Based on the 48-hour ML forecast.</p>
+                <div class="panel-form">
+                    <div class="form-row">
+                        <div class="fg">
+                            <label>CITY</label>
+                            <div class="input-wrap"><svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <input type="text" id="bt-city" placeholder="e.g., Hyderabad" class="ifield"></div>
+                        </div>
+                        <div class="fg fg-sm"><label>USAGE DURATION (hrs)</label><input type="number" id="bt-duration" value="1" min="0.5" max="8" step="0.5" class="ifield"></div>
+                    </div>
+                    <p class="appliance-label">SELECT APPLIANCES TO SCHEDULE:</p>
+                    <div id="heavy-appliance-list" class="heavy-ap-grid"></div>
+                    <button class="btn-run" id="besttime-btn">Find Best Times →</button>
+                </div>
+                <div class="panel-result" id="besttime-result" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- ── TAB 5: MONTHLY ANALYSIS ── -->
+        <div class="ftab-panel" id="panel-monthly">
+            <div class="panel-card">
+                <h3 class="panel-title">📅 Monthly Energy Generation — Full Year View</h3>
+                <p class="panel-desc">See how much solar &amp; wind energy your city can generate in each month of the year. These numbers are based on the city's geographic location and seasonal sun/wind patterns — they stay consistent across days since they reflect the city's climate, not today's live weather.</p>
+                <!-- <div class="ma-explainer-box"> -->
+                    <!-- <span class="ma-exp-icon">💡</span> -->
+                    <!-- <p><strong>Why are these values the same every day?</strong><br>
+                    Monthly generation depends on the city's <em>latitude</em> (position on Earth) and seasonal patterns — not today's clouds or wind. 
+                    For example, Hyderabad always gets more sun in March–May than in July–August (monsoon). 
+                    These are reliable yearly estimates you can plan around.</p> -->
+                <!-- </div> -->
+                <div class="panel-form">
+                    <div class="form-row">
+                        <div class="fg">
+                            <label>CITY NAME</label>
+                            <div class="input-wrap">
+                                <svg class="input-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M10 0C6.13 0 3 3.13 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <input type="text" id="ma-city" placeholder="e.g., Hyderabad" class="ifield">
+                            </div>
+                        </div>
+                        <div class="fg fg-sm">
+                            <label>SOLAR PANELS (count)</label>
+                            <input type="number" id="ma-panels" value="10" min="1" max="10000" class="ifield">
+                        </div>
+                        <div class="fg fg-sm">
+                            <label>WIND TURBINES (count)</label>
+                            <input type="number" id="ma-turbines" value="1" min="0" max="100" class="ifield">
+                        </div>
+                    </div>
+                    <button class="btn-run" id="monthly-btn">Show All 12 Months →</button>
+                </div>
+                <div class="panel-result" id="monthly-result" style="display:none"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ LOADING ══ -->
+<div class="loading-wrap" id="loading">
+    <div class="loading-orb"><div class="loading-ring"></div><div class="loading-ring r2"></div></div>
+    <p class="loading-text">Fetching weather &amp; running ML models…</p>
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ══ ERROR ══ -->
+<div class="error-wrap" id="error" style="display:none">
+    <div class="error-box">
+        <div class="error-ico">⚠️</div>
+        <h3>Something went wrong</h3>
+        <p id="error-message"></p>
+        <button class="btn-outline" onclick="document.getElementById('error').style.display='none'">Try Again</button>
+    </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div id="results" style="display:none">
+    <div class="loc-banner">
+        <div class="container">
+            <div class="loc-inner">
+                <div class="loc-left">
+                    <p class="loc-eyebrow">📍 Forecast Location</p>
+                    <h2 class="loc-name" id="location-name">--</h2>
+                    <code class="loc-coords" id="location-coords">--</code>
+                </div>
+                <div class="loc-right">
+                    <div class="loc-icon" id="weather-icon">🌤️</div>
+                    <div id="weather-condition-banner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="page-section bg-white" id="results">
+        <div class="container">
+            <span class="eyebrow">Live Output</span>
+            <h2 class="sec-title">Current Power Output</h2>
+            <div class="power-grid">
+                <div class="power-card solar-card">
+                    <div class="pc-head"><span class="pc-ico">☀️</span><span class="pc-label">SOLAR POWER</span></div>
+                    <div class="pc-val" id="solar-current">--</div><div class="pc-unit">kW</div>
+                    <div class="pc-trend" id="solar-trend">
+                        <span class="pc-trend-icon" id="solar-trend-icon">↑</span>
+                        <span id="solar-trend-text">--</span>
+                    </div>
+                    <div class="pc-desc" id="solar-desc">--</div>
+                    <div class="pc-badge-row" id="solar-badge-row"></div>
+                </div>
+                <div class="power-card wind-card">
+                    <div class="pc-head"><span class="pc-ico">💨</span><span class="pc-label">WIND POWER</span></div>
+                    <div class="pc-val" id="wind-current">--</div><div class="pc-unit">kW</div>
+                    <div class="pc-trend" id="wind-trend">
+                        <span class="pc-trend-icon" id="wind-trend-icon">↑</span>
+                        <span id="wind-trend-text">--</span>
+                    </div>
+                    <div class="pc-desc" id="wind-desc">--</div>
+                    <div class="pc-badge-row" id="wind-badge-row"></div>
+                </div>
+                <div class="power-card total-card">
+                    <div class="pc-head"><span class="pc-ico">⚡</span><span class="pc-label">TOTAL OUTPUT</span></div>
+                    <div class="pc-val" id="total-current">--</div><div class="pc-unit">kW</div>
+                    <div class="cap-wrap">
+                        <div class="cap-label">Capacity Utilisation</div>
+                        <div class="cap-track"><div class="cap-fill" id="efficiency-fill"></div></div>
+                        <div class="cap-pct" id="efficiency-value">--%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="container">
+            <span class="eyebrow">Meteorology</span>
+            <h2 class="sec-title">Current Weather Conditions</h2>
+            <div class="weather-grid">
+                <div class="weather-card" id="card-temp">
+                    <div class="wc-ico" id="ico-temp">🌡️</div>
+                    <div class="wc-label">Temperature</div>
+                    <div class="wc-val" id="temp-value">--</div>
+                    <div class="wc-status" id="status-temp"></div>
+                </div>
+                <div class="weather-card" id="card-humidity">
+                    <div class="wc-ico" id="ico-humidity">💧</div>
+                    <div class="wc-label">Humidity</div>
+                    <div class="wc-val" id="humidity-value">--</div>
+                    <div class="wc-status" id="status-humidity"></div>
+                </div>
+                <div class="weather-card" id="card-wind-speed">
+                    <div class="wc-ico" id="ico-wind-speed">🌬️</div>
+                    <div class="wc-label">Wind Speed</div>
+                    <div class="wc-val" id="wind-speed-value">--</div>
+                    <div class="wc-status" id="status-wind-speed"></div>
+                </div>
+                <div class="weather-card" id="card-cloud">
+                    <div class="wc-ico" id="ico-cloud">☁️</div>
+                    <div class="wc-label">Cloud Cover</div>
+                    <div class="wc-val" id="cloud-value">--</div>
+                    <div class="wc-status" id="status-cloud"></div>
+                </div>
+                <div class="weather-card" id="card-irradiance">
+                    <div class="wc-ico" id="ico-irradiance">🔆</div>
+                    <div class="wc-label">Solar Irradiance</div>
+                    <div class="wc-val" id="irradiance-value">--</div>
+                    <div class="wc-status" id="status-irradiance"></div>
+                </div>
+                <div class="weather-card" id="card-pressure">
+                    <div class="wc-ico" id="ico-pressure">📊</div>
+                    <div class="wc-label">Pressure</div>
+                    <div class="wc-val" id="pressure-value">--</div>
+                    <div class="wc-status" id="status-pressure"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section bg-white">
+        <div class="container">
+            <span class="eyebrow">Forecast</span>
+            <h2 class="sec-title">48-Hour Power Forecast</h2>
+
+            <!-- Interval selector -->
+            <div class="chart-controls">
+                <span class="ctrl-label">Show interval:</span>
+                <button class="interval-btn" data-interval="1">1-Hour</button>
+                <button class="interval-btn active" data-interval="3">3-Hour</button>
+                <button class="interval-btn" data-interval="6">6-Hour</button>
+                <button class="interval-btn" data-interval="12">12-Hour</button>
+                <button class="interval-btn" data-interval="24">24-Hour</button>
+                <button class="toggle-table-btn" id="toggle-table-btn" style="margin-left:auto">Show Data Table ▼</button>
+            </div>
+
+            <div class="chart-main"><canvas id="forecastChart"></canvas></div>
+            <div class="chart-pair">
+                <div class="chart-box"><p class="chart-lbl">☀️ Solar Power Trend</p><canvas id="solarChart"></canvas></div>
+                <div class="chart-box"><p class="chart-lbl">💨 Wind Power Trend</p><canvas id="windChart"></canvas></div>
+            </div>
+
+            <!-- Data Table (hidden by default) -->
+            <div id="forecast-data-table" style="display:none; margin-top:24px">
+                <h4 class="res-sub-title">📋 Forecast Data Table</h4>
+                <div class="compare-table-wrap">
+                    <table class="mini-table">
+                        <thead>
+                            <tr><th>Timestamp</th><th>Solar (kW)</th><th>Wind (kW)</th><th>Total (kW)</th><th>Dominant Source</th></tr>
+                        </thead>
+                        <tbody id="forecast-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══ 7-DAY WEATHER OUTLOOK ══ -->
+    <section class="page-section" id="weekly-section" style="display:none">
+        <div class="container">
+            <span class="eyebrow">This Week's Weather</span>
+            <h2 class="sec-title">☁️ Weather Forecast — Next Few Days</h2>
+            <p class="week-intro">Here is what the weather will be like over the coming days. Simple and clear — just the condition for each day.</p>
+            <div id="weekly-outlook-container"></div>
+        </div>
+    </section>
+
+    <!-- ══ BATTERY STORAGE GUIDE ══ -->
+    <section class="page-section bg-white" id="battery-section" style="display:none">
+        <div class="container">
+            <span class="eyebrow">Smart Battery Use</span>
+            <h2 class="sec-title">🔋 When to Store &amp; When to Use Energy</h2>
+            <p class="week-intro">Based on today's forecast — here is exactly when your battery should be charging (storing energy) and when you should use that stored energy.</p>
+            <div id="battery-guide-container"></div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="container">
+            <span class="eyebrow">Geography</span>
+            <h2 class="sec-title">Location Map</h2>
+            <div class="map-box" id="map"></div>
+        </div>
+    </section>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" id="about">
+    <div class="container">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo" style="margin-bottom:12px">
+                    <div class="logo-bubble"><svg width="18" height="18" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="15" stroke="#fff" stroke-width="2.5"/><path d="M20 10L20 30M13 20L27 20" stroke="#fff" stroke-width="2.5"/><circle cx="20" cy="20" r="4" fill="#fff"/></svg></div>
+                    <span class="logo-name" style="color:#fff">RenewCast AI</span>
+                </div>
+                <p class="footer-tagline">Renewable energy forecasting using Random Forest ML trained on real Kaggle datasets with 70/30 train-test split.</p>
+            </div>
+            
+            
+        </div>
+        <div class="footer-bottom"><span>&copy; 2024 RenewCast AI — Academic Project | Dataset: Kaggle CC0</span></div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/config.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/maps.js"></script>
+<script src="js/features.js"></script>
+<script src="js/main.js"></script>
+<script src="js/monthly.js"></script>
+<script src="js/weekly_outlook.js"></script>
+<script src="js/battery_guide.js"></script>
+</body>
+</html>
